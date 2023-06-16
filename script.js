@@ -17,28 +17,51 @@ let songs = [
     {songName: "Alfaaz - Haaye Mera Dil", filePath: "songs/song5.mp3" , coverPath: "covers/cover5.jpg"},
     {songName: "Ja Tujhko", filePath: "songs/song6.mp3" , coverPath: "covers/cover6.jpg"}
 ];
-// audioElement.play(); 
+audioElement.play(); 
 
 songItems.forEach((element, i)=>{
     element.getElementsByTagName('img')[0].src = songs[i].coverPath;
     element.getElementsByClassName('songName')[0].innerText = songs[i].songName;
 });
-//Handle play/pause events
-masterPlay.addEventListener('click', ()=>{
-    if(audioElement.paused || audioElement.currentTime<=0){
-        audioElement.play();
-        masterPlay.classList.remove('fa-play-circle');
-        masterPlay.classList.add('fa-pause-circle');
-        gif.style.opacity = 1;
+// Handle play/pause events
+masterPlay.addEventListener('click', () => {
+    if (audioElement.paused || audioElement.currentTime <= 0) {
+      audioElement.play();
+      masterPlay.classList.remove('fa-play-circle');
+      masterPlay.classList.add('fa-pause-circle');
+      gif.style.opacity = 1;
+      updateSongItemPlayButton(true); // Update the song item play buttons
+    } else {
+      audioElement.pause();
+      masterPlay.classList.remove('fa-pause-circle');
+      masterPlay.classList.add('fa-play-circle');
+      gif.style.opacity = 0;
+      updateSongItemPlayButton(false); // Update the song item play buttons
     }
-    //if audio is playing pause it
-    else{
-        audioElement.pause();
-        masterPlay.classList.remove('fa-pause-circle');
-        masterPlay.classList.add('fa-play-circle');
-        gif.style.opacity = 0;
-    }
-})
+  });
+  
+  // Function to update song item play buttons
+  function updateSongItemPlayButton(isPlaying) {
+    const songItemPlayButtons = document.querySelectorAll('.songItemPlay');
+    songItemPlayButtons.forEach((button) => {
+      if (button.id === String(songIndex)) {
+        // Update the current song item play button
+        if (isPlaying) {
+          button.classList.remove('fa-play-circle');
+          button.classList.add('fa-pause-circle');
+        } else {
+          button.classList.remove('fa-pause-circle');
+          button.classList.add('fa-play-circle');
+        }
+      } else {
+        // Reset the other song item play buttons
+        button.classList.remove('fa-pause-circle');
+        button.classList.add('fa-play-circle');
+      }
+    });
+  }
+  
+  
 
 //listen to events
 audioElement.addEventListener('timeupdate', ()=>{
@@ -74,6 +97,8 @@ Array.from(document.getElementsByClassName('songItemPlay')).forEach((element)=>{
         masterPlay.classList.add('fa-pause-circle');
     })
 })
+
+
 
 document.getElementById('next').addEventListener('click', ()=>{
     if(songIndex >=5){

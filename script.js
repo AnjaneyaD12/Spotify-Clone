@@ -65,6 +65,7 @@ masterPlay.addEventListener('click', () => {
 
 // Song item play button click event listeners
 songItems.forEach((element, i) => {
+  element.getElementsByTagName('img')[0].src = songs[i].coverPath;
   element.getElementsByClassName('songItemPlay')[0].addEventListener('click', () => {
     playSong(i);
   });
